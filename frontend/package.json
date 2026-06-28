@@ -15,15 +15,16 @@
     "react-router-dom": "^7.15.1",
     "react-scripts": "5.0.1",
     "recharts": "^3.8.1",
-    "web-vitals": "^2.1.4",
-    "proxy": "http://localhost:5000"
+    "web-vitals": "^2.1.4"
   },
+
+  "proxy": "http://localhost:5000",
+    
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "proxy": "http://localhost:5000"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
