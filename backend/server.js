@@ -16,7 +16,9 @@ const app = express();
 //app.use(cors());
 app.use(cors({
   origin: ['http://localhost:3000', 
-           'https://workpulse-frontend.vercel.app'
+           'https://workpulse-frontend.vercel.app',
+           'https://workpulse-miniquin06.vercel.app',
+           /\.vercel\.app$/
   ],
   credentials: true
 }));
