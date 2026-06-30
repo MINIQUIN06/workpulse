@@ -270,7 +270,7 @@ export default function Employees() {
                     onChange={e => setForm({ ...form, name: e.target.value })}
                     className="w-full rounded-xl px-4 py-2.5 mt-1 focus:outline-none focus:ring-2 focus:ring-amber-400 text-white placeholder-slate-600 border border-slate-700"
                     style={{ background: '#111827' }}
-                    placeholder="John Doe" />
+                    placeholder="keerth" />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-slate-400">Email * (@workpulse.com)</label>
@@ -278,7 +278,7 @@ export default function Employees() {
                     onChange={e => setForm({ ...form, email: e.target.value })}
                     className="w-full rounded-xl px-4 py-2.5 mt-1 focus:outline-none focus:ring-2 focus:ring-amber-400 text-white placeholder-slate-600 border border-slate-700"
                     style={{ background: '#111827' }}
-                    placeholder="john@workpulse.com" />
+                    placeholder="keerth@workpulse.com" />
                   {form.email && !form.email.endsWith('@workpulse.com') && (
                     <p className="text-xs text-red-400 mt-1">Must end with @workpulse.com</p>
                   )}
