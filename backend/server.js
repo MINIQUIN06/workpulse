@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 dotenv.config();
-// Import Routes (we'll add these soon)
+// Import Routes 
 require('./models/Employee');
 require('./models/Skill');
 require('./models/Project');
