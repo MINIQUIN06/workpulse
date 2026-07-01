@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
-import { DollarSign, X } from 'lucide-react';
+import { DollarSign, X , Download} from 'lucide-react';
 import { useMounted, fadeUp, fadeIn } from '../../hooks/useAnimation';
+import toast from 'react-hot-toast';
 
 export default function EmployeePayroll() {
   const { user } = useAuth();
@@ -30,6 +31,26 @@ export default function EmployeePayroll() {
   const totalEarned = payrolls
     .filter(p => p.status === 'paid')
     .reduce((acc, p) => acc + (p.netSalary || 0), 0);
+
+    const handleDownloadSlip = async (payroll) => {
+  try {
+    const res = await axios.get(`/payroll/${payroll._id}/slip`, {
+      responseType: 'blob'
+    });
+    const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Payslip_${payroll.month}_${payroll.year}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    toast.success('Payslip downloaded!');
+  } catch (err) {
+    toast.error('Failed to download payslip');
+  }
+};
+
 
   if (loading) return (
     <div className="flex items-center justify-center h-96">
@@ -141,12 +162,18 @@ export default function EmployeePayroll() {
             style={{ background: '#0d1426' }}>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-white">Salary Slip</h2>
+              <div className="flex items-center gap-2">
+                <button onClick={() => handleDownloadSlip(selected)}
+                className="p-2 text-emerald-400 hover:bg-emerald-400 hover:bg-opacity-10 rounded-lg transition">
+                <Download size={18} />
+               </button>
               <button onClick={() => setSelected(null)}
                 className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-lg">
                 <X size={20} />
               </button>
             </div>
-
+           </div>
+             
             {/* Employee Info */}
             <div className="p-4 rounded-xl border border-emerald-500 border-opacity-20 mb-6"
               style={{ background: 'rgba(16,185,129,0.05)' }}>

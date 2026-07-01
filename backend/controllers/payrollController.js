@@ -77,6 +77,7 @@ exports.getAllPayrolls = async (req, res) => {
 exports.getMyPayrolls = async (req, res) => {
   try {
     const payrolls = await Payroll.find({ employee: req.params.employeeId })
+      .populate('employee', 'name role department employeeCode email')
       .sort({ year: -1, createdAt: -1 });
     res.json(payrolls);
   } catch (err) {
