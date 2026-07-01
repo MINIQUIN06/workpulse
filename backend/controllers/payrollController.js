@@ -124,7 +124,7 @@ const PDFDocument = require('pdfkit');
 exports.downloadPayslip = async (req, res) => {
   try {
     const payroll = await Payroll.findById(req.params.id)
-      .populate('employee', 'name role department employeeId email');
+      .populate('employee', 'name role department employeeCode email');
 
     if (!payroll) {
       return res.status(404).json({ message: 'Payroll record not found' });
@@ -135,7 +135,7 @@ exports.downloadPayslip = async (req, res) => {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=Payslip_${payroll.employee.employeeId}_${payroll.month}_${payroll.year}.pdf`
+      `attachment; filename=Payslip_${payroll.employee.employeeCode}_${payroll.month}_${payroll.year}.pdf`
     );
 
     doc.pipe(res);
@@ -147,7 +147,7 @@ exports.downloadPayslip = async (req, res) => {
 
     // Employee Info
     doc.fontSize(10);
-    doc.text(`Employee ID: ${payroll.employee.employeeId}`);
+    doc.text(`Employee ID: ${payroll.employee.employeeCode}`);
     doc.text(`Name: ${payroll.employee.name}`);
     doc.text(`Department: ${payroll.employee.department}`);
     doc.text(`Role: ${payroll.employee.role}`);
