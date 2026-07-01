@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, X, DollarSign, CheckCircle, Clock, Eye } from 'lucide-react';
+import { Plus, Trash2, X, DollarSign, CheckCircle,
+  Download, Clock, Eye } from 'lucide-react';
 import { useMounted, fadeUp, fadeIn } from '../hooks/useAnimation';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -119,6 +120,25 @@ export default function PayrollManagement() {
     }
   };
 
+  const handleDownloadSlip = async (payroll) => {
+  try {
+    const res = await axios.get(`/payroll/${payroll._id}/slip`, {
+      responseType: 'blob'
+    });
+    const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Payslip_${payroll.employee?.name}_${payroll.month}_${payroll.year}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    toast.success('Payslip downloaded!');
+  } catch (err) {
+    toast.error('Failed to download payslip');
+  }
+};
+
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this payroll record?')) return;
     try {
@@ -227,6 +247,10 @@ export default function PayrollManagement() {
                       <button onClick={() => setSelected(payroll)}
                         className="p-2 text-amber-400 hover:bg-amber-400 hover:bg-opacity-10 rounded-lg transition">
                         <Eye size={15} />
+                      </button>
+                      <button onClick={() => handleDownloadSlip(payroll)}
+                        className="p-2 text-blue-400 hover:bg-blue-400 hover:bg-opacity-10 rounded-lg transition">
+                        <Download size={15} />
                       </button>
                       {payroll.status === 'pending' && (
                         <button onClick={() => handleMarkPaid(payroll._id)}
@@ -482,11 +506,17 @@ export default function PayrollManagement() {
             style={{ background: '#0d1426' }}>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-white">Salary Slip</h2>
+              <div className="flex items-center gap-2">
+              <button onClick={() => handleDownloadSlip(selected)}
+                 className="p-2 text-blue-400 hover:bg-blue-400 hover:bg-opacity-10 rounded-lg transition">
+               <Download size={18} />
+              </button>
               <button onClick={() => setSelected(null)}
                 className="p-2 text-slate-500 hover:text-white hover:bg-slate-800 rounded-lg">
                 <X size={20} />
               </button>
             </div>
+          </div>
 
             <div className="p-4 rounded-xl border border-amber-500 border-opacity-20 mb-5"
               style={{ background: 'rgba(245,158,11,0.05)' }}>
